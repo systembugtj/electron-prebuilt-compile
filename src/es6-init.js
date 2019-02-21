@@ -3,6 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import {init} from 'electron-compile';
 
+fs.statSyncNoException = fs.statSyncNoException || ((...args) => {
+  try {
+    return fs.statSync(...args);
+  } catch (e) {
+    return null;
+  }
+});
+
 function findPackageJson(initScript) {
   if (initScript === '/' || initScript.match(/^[A-Za-z]:$/)) {
     throw new Error("Can't find package.json");
